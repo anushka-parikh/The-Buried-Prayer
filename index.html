@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Buried Prayer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Playfair Display', serif;
+            background-color: #1A1F2C;
+            color: #D6BCFA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .poem-container {
+            max-width: 600px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .poem-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .poem-stanza {
+            margin-bottom: 1rem;
+            white-space: pre-line;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .poem-container {
+                padding: 1rem;
+            }
+            .poem-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="particle-bg" id="particleCanvas"></canvas>
+    <div class="poem-container">
+        <h1 class="poem-title" style="animation-delay: 0.5s;">The Buried Prayer</h1>
+        <div class="poem-content">
+            <div class="poem-stanza" style="animation-delay: 1s;">
+I hear the words, but can't reply,
+A distant echo, a silent cry.
+I am here, but I am not,
+A soul lost, a life forgot.
+            </div>
+            <div class="poem-stanza" style="animation-delay: 1.5s;">
+My dream that doesn't end,
+A shadow I can't break or bend.
+I touch light that slips away,
+Lives in the darkness, my lost pray.
+            </div>
+            <div class="poem-stanza" style="animation-delay: 2s;">
+Too scattered to be shattered,
+A soul too worn to feel mattered.
+Broken into pieces, pieces to dust,
+I wait to bleed, in void and disgust.
+            </div>
+            <div class="poem-stanza" style="animation-delay: 2.5s;">
+Fading like the echoes of my screams,
+Deafened by the silence of my dreams.
+A fallow heart that can't bear a root,
+Where hope once whispered, now mute.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.speed = 0.1 + Math.random() * 0.2;
+                this.size = 1 + Math.random() * 2;
+                this.opacity = 0.1 + Math.random() * 0.3;
+            }
+
+            update() {
+                this.y -= this.speed;
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(214, 188, 250, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const particles = Array.from({ length: 100 }, () => new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
